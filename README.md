@@ -8,11 +8,12 @@
 
 
 
-- 📌 **Project Overview**
+📌 **Project Overview**
 
 This project is a Tic Tac Toe game developed using React 18 and TypeScript. It also serves as a demonstration platform for applying key security concepts through the integration of tools for Static Application Security Testing (SAST), Software Composition Analysis (SCA), Dynamic Application Security Testing (DAST),Argo CD, and Kubernetes .
 
--🌟  **Pipeline Stages**
+
+🌟  **Pipeline Stages**
 
 The CI/CD pipeline consists of the following stages:
 
@@ -23,9 +24,10 @@ The CI/CD pipeline consists of the following stages:
 5. **Docker Image Scan** - Scans the image for vulnerabilities using Trivy
 6. **Docker Image Push** - Pushes the image to GitHub Container Registry
 7. **Update Kubernetes Deployment** - Updates the Kubernetes deployment file with the new image tag
+
 ![Devsecops-pipeline](./images/pipeline_1.png)
-Devsecops-pipeline/blob/main/images/pipeline_1.png
-![Screenshot 2025-04-12 at 09.17.16.png](attachment:63ec00f1-e0c8-493e-b4bd-f833e32ebd5c:Screenshot_2025-04-12_at_09.17.16.png)
+
+
 
  🎯 **Getting Started:**
 
@@ -50,12 +52,16 @@ Before running this workflow, add the following **secrets** in your GitHub repo 
 
  https://github.com/MayadaAhmed1/Devsecops-pipeline/actions/runs/14303698830/job/40082794239
 
+
+
 ### 📌 Upcoming Changes
 
 - [ ]  Add Code coverage ,SCA phase
 - [ ]  Add Sonar Qube and Quality gate phase
 - [ ]  Add Dynamic phase(DAST)
 - [ ]  Apply IAST
+
+
 
 📚 **Useful Links:**
 

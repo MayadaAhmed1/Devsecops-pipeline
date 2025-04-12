@@ -17,6 +17,7 @@ RUN npm run build
 FROM nginx:alpine  
 RUN apk update && \
     apk upgrade libxml2 --repository=http://dl-cdn.alpinelinux.org/alpine/v3.21/main && \
+    apk upgrade c-ares=1.34.5-r0  \
     apk add --no-cache \
         libexpat=2.7.0-r0 \
         libxslt=1.1.42-r2 \
