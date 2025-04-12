@@ -1,90 +1,60 @@
-# DevSecOps Pipeline Implementation for Tic Tac Toe Game
+# Second Project CI/CD
 
-![Screenshot 2025-03-04 at 7 16 48 PM](https://github.com/user-attachments/assets/7ed79f9c-9144-4870-accd-500085a15592)
+- **Project Overview**
+- **Pipeline Stages**
+- **Getting Started**
+- **Upcoming changes**
+- **Useful Links**
 
-![image](https://github.com/user-attachments/assets/5b2813a5-f493-4665-8964-77359b5be93a)
+- **Project Overview**
 
-## Features
+This project is a Tic Tac Toe game developed using React 18 and TypeScript. It also serves as a demonstration platform for applying key security concepts through the integration of tools for Static Application Security Testing (SAST), Software Composition Analysis (SCA), Dynamic Application Security Testing (DAST),Argo CD, and Kubernetes .
 
-- 🎮 Fully functional Tic Tac Toe game
-- 📊 Score tracking for X, O, and draws
-- 📜 Game history with timestamps
-- 🏆 Highlights winning combinations
-- 🔄 Reset game and statistics
-- 📱 Responsive design for all devices
+- **Pipeline Stages**
 
-## Technologies Used
+The CI/CD pipeline consists of the following stages:
 
-- React 18
-- TypeScript
-- Tailwind CSS
-- Lucide React for icons
+1. **Unit Testing** - Runs the test suite using Vitest
+2. **Static Code Analysis** - Performs linting with ESLint
+3. **Build** - Creates a production build of the application
+4. **Docker Image Creation** - Builds a Docker image using a multi-stage Dockerfile
+5. **Docker Image Scan** - Scans the image for vulnerabilities using Trivy
+6. **Docker Image Push** - Pushes the image to GitHub Container Registry
+7. **Update Kubernetes Deployment** - Updates the Kubernetes deployment file with the new image tag
 
-## Project Structure
+![Screenshot 2025-04-12 at 09.17.16.png](attachment:63ec00f1-e0c8-493e-b4bd-f833e32ebd5c:Screenshot_2025-04-12_at_09.17.16.png)
 
-```
-src/
-├── components/
-│   ├── Board.tsx       # Game board component
-│   ├── Square.tsx      # Individual square component
-│   ├── ScoreBoard.tsx  # Score tracking component
-│   └── GameHistory.tsx # Game history component
-├── utils/
-│   └── gameLogic.ts    # Game logic utilities
-├── App.tsx             # Main application component
-└── main.tsx           # Entry point
-```
+**Getting Started:**
 
-## Game Logic
+**Prerequisites:**
 
-The game implements the following rules:
+### 🔹 **Required GitHub Secrets**
 
-1. X goes first, followed by O
-2. The first player to get 3 of their marks in a row (horizontally, vertically, or diagonally) wins
-3. If all 9 squares are filled and no player has 3 marks in a row, the game is a draw
-4. Winning combinations are highlighted
-5. Game statistics are tracked and displayed
+Before running this workflow, add the following **secrets** in your GitHub repo (**Settings → Secrets → Actions**):
 
-## Getting Started
+- YOUR_GITHUB_USERNAME  → Docker username
+- YOUR_GITHUB_TOKEN → Docker password
 
-### Prerequisites
+🔹 **Run**
 
-- Node.js (v14 or higher)
-- npm or yarn
+-Make any change (EX: change player name in file” ScoreBoard” )commit and push changes that will trigger the pipeline .
 
-### Installation
+-Troubleshooting any issue generated at workflow runs like :
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/devsecops-demo.git
-   cd devsecops-demo
-   ```
+     a)Issue found unable to parse image name so i had to edit the docker image tag at two stages (Docker build and image scan) at ci-cd yaml file.
 
-2. Install dependencies:
-   ```bash
-   npm install
-   # or
-   yarn
-   ```
+     b)Trivy results some vulnerabilities found while scan the docker image as mentioned below, so i had to edit the docker config file for new versions.
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
+ https://github.com/MayadaAhmed1/Devsecops-pipeline/actions/runs/14303698830/job/40082794239
 
-4. Open your browser and navigate to `http://localhost:5173`
+### 📌 Upcoming Changes
 
-## Building for Production
+- [ ]  Add Code coverage ,SCA phase
+- [ ]  Add Sonar Qube and Quality gate phase
+- [ ]  Add Dynamic phase(DAST)
+- [ ]  Apply IAST
 
-To create a production build:
+**Useful Links:**
 
-```bash
-npm run build
-# or
-yarn build
-```
-
-The build artifacts will be stored in the `dist/` directory.
-
+https://github.com/iam-veeramalla/devsecops-demo
+https://www.youtube.com/watch?v=Ke_Wr5zPE0A&t=4047s
