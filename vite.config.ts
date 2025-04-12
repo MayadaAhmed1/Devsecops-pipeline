@@ -10,7 +10,7 @@ export default defineConfig({
   },
   test: {
     globals: true, // Optional, enables global test functions (e.g., expect, describe, it)
-    environment: 'jsdom', // Use 'node' for Node.js environment, 'jsdom' for browser-like environment
+    environment: 'node', // Use 'node' for Node.js environment, 'jsdom' for browser-like environment
     coverage: {
       provider: 'v8', // Or 'v8' (alternative coverage providers)
       reporter: ['text', 'lcov', 'html'], // Coverage reporters
