@@ -28,6 +28,30 @@ jobs:
       - name: Run tests
         run: npm test || echo "No tests found, would add tests in a real project"
 
+      # - name: Install Vitest and C8 for coverage
+      #   run: npm install --save-dev vitest@1.6.1 @vitest/coverage-v8@1.6.1
+
+      # - name: Run tests with coverage
+      #   run:  npx vitest run --coverage
+
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v5
+      #   with:
+      #    token: ${{ secrets.CODECOV_TOKEN }}
+
+  code-coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
       - name: Install Vitest and C8 for coverage
         run: npm install --save-dev vitest@1.6.1 @vitest/coverage-v8@1.6.1
 
@@ -38,6 +62,42 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
          token: ${{ secrets.CODECOV_TOKEN }}
+      
+  dependency-check:
+    name: OWASP Dependency Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java (required by Dependency-Check)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Download OWASP Dependency-Check
+        run: |
+          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/latest/download/dependency-check-8.4.0-release.zip
+          unzip dependency-check.zip -d dependency-check
+          chmod +x dependency-check/bin/dependency-check.sh
+
+      - name: Run Dependency Check
+        run: |
+          ./dependency-check/bin/dependency-check.sh \
+            --project "React Dependency Check" \
+            --scan ./ \
+            --format "ALL" \
+            --out ./dependency-check-report \
+            --nodeAudit \
+            --enableExperimental
+
+      - name: Upload Dependency Check Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: ./dependency-check-report
 
   lint:
     name: Static Code Analysis
