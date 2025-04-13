@@ -157,7 +157,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [test,dependency-analysis,code-coverage,lint]
+    needs: [test,code-coverage,lint]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
