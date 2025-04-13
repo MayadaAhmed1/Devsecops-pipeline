@@ -65,6 +65,8 @@ Before running this workflow, add the following **secrets** in your GitHub repo 
 
 📚 **Useful Links:**
 
+https://github.com/sottlmarek/DevSecOps?tab=readme-ov-file#oss-and-dependency-management
+
 https://github.com/iam-veeramalla/devsecops-demo
 
 https://www.youtube.com/watch?v=Ke_Wr5zPE0A&t=4047s

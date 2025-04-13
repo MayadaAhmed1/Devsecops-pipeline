@@ -51,29 +51,53 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
          token: ${{ secrets.CODECOV_TOKEN }}
-      
-  dependency-analysis:
-        name: Scorecard analysis
-        runs-on: ubuntu-latest
-        steps:
-          - name: "Checkout code"
-            uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-            with:
-              persist-credentials: false
-    
-          - name: "Run analysis"
-            uses: ossf/scorecard-action@f49aabe0b5af0936a0987cfb85d86b75731b0186 # v2.4.1
-            with:
-              results_file: results.sarif
-              results_format: sarif
-              publish_results: true
 
-          - name: "Upload artifact"
-            uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
-            with:
-                name: SARIF file
-                path: results.sarif
-                retention-days: 5
+  dependency-check :
+    name: cdxgen SBOM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate CycloneDX SBOM
+        run: npx cdxgen --output bom.json
+        
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: cyclone-bom
+          path: bom.json
+      
+  # dependency-analysis:
+  #       name: Scorecard analysis
+  #       runs-on: ubuntu-latest
+  #       steps:
+  #         - name: "Checkout code"
+  #           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  #           with:
+  #             persist-credentials: false
+    
+  #         - name: "Run analysis"
+  #           uses: ossf/scorecard-action@f49aabe0b5af0936a0987cfb85d86b75731b0186 # v2.4.1
+  #           with:
+  #             results_file: results.sarif
+  #             results_format: sarif
+  #             publish_results: true
+
+  #         - name: "Upload artifact"
+  #           uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+  #           with:
+  #               name: SARIF file
+  #               path: results.sarif
+  #               retention-days: 5
 
   # dependency-check:
   #   name: OWASP Dependency Check
@@ -133,7 +157,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [test, lint]
+    needs: [test,dependency-analysis,code-coverage,lint]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
