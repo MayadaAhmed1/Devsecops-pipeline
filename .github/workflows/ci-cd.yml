@@ -69,14 +69,19 @@ jobs:
 
       - name: Generate SBOM using cdxgen
         run: |
-            docker run --rm \
-              -v ${{ github.workspace }}:/app \
-              -w /app \
-              owasp/cdxgen \
-              -o bom.json
+         docker run --rm \
+         -e CDXGEN_DEBUG_MODE=debug \
+         -e NPM_INSTALL_ARGS="--package-lock --legacy-peer-deps" \
+         -v /tmp:/tmp \
+         -v ${{ github.workspace }}:/app:rw \
+         -t ghcr.io/cyclonedx/cdxgen:latest \
+         -t node20 \
+         -r /app \
+         -o /app/bom.json
         
       # - name: Generate CycloneDX SBOM
       #   run: npx cdxgen --output bom.json
+     
     
       - name: Upload SBOM as artifact
         uses: actions/upload-artifact@v4
