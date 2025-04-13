@@ -28,17 +28,6 @@ jobs:
       - name: Run tests
         run: npm test || echo "No tests found, would add tests in a real project"
 
-      # - name: Install Vitest and C8 for coverage
-      #   run: npm install --save-dev vitest@1.6.1 @vitest/coverage-v8@1.6.1
-
-      # - name: Run tests with coverage
-      #   run:  npx vitest run --coverage
-
-      # - name: Upload coverage to Codecov
-      #   uses: codecov/codecov-action@v5
-      #   with:
-      #    token: ${{ secrets.CODECOV_TOKEN }}
-
   code-coverage:
     name: Code Coverage
     runs-on: ubuntu-latest
@@ -79,7 +68,7 @@ jobs:
 
       - name: Download OWASP Dependency-Check
         run: |
-          curl -sSL -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip
+          curl -sSL -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip
           unzip dependency-check.zip -d dependency-check
           chmod +x dependency-check/bin/dependency-check.sh
 
