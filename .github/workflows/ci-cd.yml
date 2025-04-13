@@ -69,8 +69,12 @@ jobs:
 
       - name: Generate SBOM using cdxgen
         run: |
-          docker run --rm -v ${{ github.workspace }}:/src -w /src cyclonedx/cdxgen -o bom.json
-      
+            docker run --rm \
+              -v ${{ github.workspace }}:/app \
+              -w /app \
+              owasp/cdxgen \
+              -o bom.json
+        
       # - name: Generate CycloneDX SBOM
       #   run: npx cdxgen --output bom.json
     
