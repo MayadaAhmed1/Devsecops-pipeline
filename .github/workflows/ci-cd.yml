@@ -209,6 +209,9 @@ jobs:
           serve -s build -l 3000 &
           sleep 10  # Give server time to start
 
+      - name: Set up Docker login for GitHub Container Registry
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Run OWASP ZAP Baseline Scan
         run: |
           docker run -u root -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zap-baseline -t http://localhost:3000 -g gen.conf -r zap-report.html
