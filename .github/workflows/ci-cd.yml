@@ -9,7 +9,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  unit-test:
     name: Unit Testing
     runs-on: ubuntu-latest
     steps:
@@ -85,29 +85,6 @@ jobs:
           name: cyclone-bom
           path: bom.json
       
-  # dependency-analysis:
-  #       name: Scorecard analysis
-  #       runs-on: ubuntu-latest
-  #       steps:
-  #         - name: "Checkout code"
-  #           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-  #           with:
-  #             persist-credentials: false
-    
-  #         - name: "Run analysis"
-  #           uses: ossf/scorecard-action@f49aabe0b5af0936a0987cfb85d86b75731b0186 # v2.4.1
-  #           with:
-  #             results_file: results.sarif
-  #             results_format: sarif
-  #             publish_results: true
-
-  #         - name: "Upload artifact"
-  #           uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
-  #           with:
-  #               name: SARIF file
-  #               path: results.sarif
-  #               retention-days: 5
-
   # dependency-check:
   #   name: OWASP Dependency Check
   #   runs-on: ubuntu-latest
@@ -144,7 +121,7 @@ jobs:
   #         name: dependency-check-report
   #         path: ./dependency-check-report
 
-  lint:
+  static-code:
     name: Static Code Analysis
     runs-on: ubuntu-latest
     steps:
@@ -163,7 +140,7 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-  sonar-build:
+  sonar-scan:
           name: SonarQube Scan
           runs-on: ubuntu-latest
           steps:
@@ -176,15 +153,15 @@ jobs:
                 SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
             # If you wish to fail your job when the Quality Gate is red, uncomment the
             # following lines. This would typically be used to fail a deployment.
-            # - uses: sonarsource/sonarqube-quality-gate-action@master
-            #   timeout-minutes: 5
-            #   env:
-            #      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}                 
+            - uses: sonarsource/sonarqube-quality-gate-action@master
+              timeout-minutes: 5
+              env:
+                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}                 
 
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [test,code-coverage,lint]
+    needs: [unit-test,code-coverage,static-code,dependency-check]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -206,6 +183,42 @@ jobs:
         with:
           name: build-artifacts
           path: dist/
+
+
+  Zap-scan:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Serve build in background
+        run: |
+          npm install -g serve
+          serve -s build -l 3000 &
+          sleep 10  # Give server time to start
+
+      - name: Run OWASP ZAP Baseline Scan
+        run: |
+          docker run -u root -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable \
+            zap-baseline.py -t http://localhost:3000 -g gen.conf -r zap-report.html
+
+      - name: Upload ZAP Scan Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: zap-report.html
 
   docker:
     name: Docker Build and Push
