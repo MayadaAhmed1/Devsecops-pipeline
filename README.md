@@ -11,7 +11,8 @@
 📌 **Project Overview**
 
 This project is a Tic Tac Toe game developed using React 18 and TypeScript. It also serves as a demonstration platform for applying key security concepts through the integration of tools for Static Application Security Testing (SAST), Software Composition Analysis (SCA), Dynamic Application Security Testing (DAST),Argo CD, and Kubernetes .
-
+Note: the original Github project listed below , i mad some change in the project by adding new stages mentioned in the "upcoming section" 
+Original Project: https://github.com/iam-veeramalla/devsecops-demo
 
 🌟  **Pipeline Stages**
 
@@ -19,13 +20,17 @@ The CI/CD pipeline consists of the following stages:
 
 1. **Unit Testing** - Runs the test suite using Vitest
 2. **Static Code Analysis** - Performs linting with ESLint
+3. **Code Coverage** - Apply Code coverage using Vitest and integrate with codecov for statistics visual dispaly 
+4. **Software Composition Analysis (SCA)** - Integrate cdxgen for dependency to produce SBOM
+5. **SonarQube** - Performs static code analysis 
+6. **Quality Gates** - Compare according to organization Quality Policy
 3. **Build** - Creates a production build of the application
 4. **Docker Image Creation** - Builds a Docker image using a multi-stage Dockerfile
 5. **Docker Image Scan** - Scans the image for vulnerabilities using Trivy
 6. **Docker Image Push** - Pushes the image to GitHub Container Registry
 7. **Update Kubernetes Deployment** - Updates the Kubernetes deployment file with the new image tag
 
-![Devsecops-pipeline](./images/pipeline_1.png)
+![Devsecops-pipeline](./images/Devsecops_2.png)
 
 
 
@@ -37,8 +42,9 @@ The CI/CD pipeline consists of the following stages:
 
 Before running this workflow, add the following **secrets** in your GitHub repo (**Settings → Secrets → Actions**):
 
-- YOUR_GITHUB_USERNAME  → Docker username
-- YOUR_GITHUB_TOKEN → Docker password
+- TOKEN → Github repository container password
+- SONAR_HOST_URL → Sonar server URL at AWS EC2
+- SONAR_TOKEN → Sonar server password 
 
 🔹 **Run**
 
@@ -53,15 +59,22 @@ Before running this workflow, add the following **secrets** in your GitHub repo 
  https://github.com/MayadaAhmed1/Devsecops-pipeline/actions/runs/14303698830/job/40082794239
 
 
+### 📌 Upcoming Changes
+
+- [x]  Add Code coverage ,SCA phase
+- [x]  Add Sonar Qube and Quality gate phase
+- [ ]  Add Dynamic phase(DAST)
+- [ ]  Apply IAST
+
 ### 1) Implement Code Coverage
 
 - Integrated test coverage using **Vitest**, with the necessary configuration added to the `vite.config.ts` file.
-- Updated the CI/CD pipeline YAML file to include steps for installing coverage dependencies, executing tests with coverage, and generating reports.
+- Updated the CI/CD pipeline YAML file to include steps for installing coverage dependencies, executing the coverage, and generating reports.
 - Integrated **Codecov** into the pipeline to visualize and monitor coverage statistics for each pipeline run.
 
 📊 [View Codecov Dashboard](https://app.codecov.io/gh/MayadaAhmed1/Devsecops-pipeline)
 
-### 2) **Software Composition Analysis (SCA) Integration**
+### 2) Software Composition Analysis (SCA) Integration
 
 - Integrated **Software Composition Analysis (SCA)** into the CI/CD pipeline to enhance visibility into third-party dependencies and manage supply chain risks.
 - Utilized the [`cdxgen`](https://github.com/CycloneDX/cdxgen) GitHub Action to automatically generate a **Software Bill of Materials (SBOM)** as part of the pipeline execution.
@@ -147,17 +160,6 @@ During pipeline execution, SonarQube compares the results of the code analysis a
 > 
 
 This enforcement mechanism ensures that only high-quality, secure, and maintainable code moves forward in the delivery process.
-
-
-
-```
-
-### 📌 Upcoming Changes
-
-- [x]  Add Code coverage ,SCA phase
-- [x]  Add Sonar Qube and Quality gate phase
-- [ ]  Add Dynamic phase(DAST)
-- [ ]  Apply IAST
 
 
 
