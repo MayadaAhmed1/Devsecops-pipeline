@@ -11,7 +11,9 @@
 📌 **Project Overview**
 
 This project is a Tic Tac Toe game developed using React 18 and TypeScript. It also serves as a demonstration platform for applying key security concepts through the integration of tools for Static Application Security Testing (SAST), Software Composition Analysis (SCA), Dynamic Application Security Testing (DAST),Argo CD, and Kubernetes .
-Note: the original Github project listed below , i mad some change in the project by adding new stages mentioned in the "upcoming section" 
+
+Note: the original Github project listed below , i made some changes in the project for more detailes please check "upcoming section" .
+
 Original Project: https://github.com/iam-veeramalla/devsecops-demo
 
 🌟  **Pipeline Stages**
@@ -22,7 +24,7 @@ The CI/CD pipeline consists of the following stages:
 2. **Static Code Analysis** - Performs linting with ESLint
 3. **Code Coverage** - Apply Code coverage using Vitest and integrate with codecov for statistics visual dispaly 
 4. **Software Composition Analysis (SCA)** - Integrate cdxgen for dependency to produce SBOM
-5. **SonarQube** - Performs static code analysis 
+5. **Static Code Analysis** - Performs static code analysis by Sonar Qube 
 6. **Quality Gates** - Compare according to organization Quality Policy
 3. **Build** - Creates a production build of the application
 4. **Docker Image Creation** - Builds a Docker image using a multi-stage Dockerfile
@@ -136,10 +138,10 @@ Once SonarQube is operational, integrate it into your CI/CD pipeline by configur
 4. Run the pipeline by pushing the sonar new configuration ,check sonar dashboard it will show the run vulnerabilities status 
 
  
+![Devsecops-pipeline](./images/sonarResult.png)
 
-![Screenshot 2025-04-14 at 04.53.52.png](attachment:bb31cd6f-14b4-49f1-9647-90032025cf88:Screenshot_2025-04-14_at_04.53.52.png)
 
-### 4) Enforce SonarQube Quality Gates
+### 4) SonarQube Quality Gates
 
 SonarQube Quality Gates used in maintaining code quality and enforcing organizational standards during the development lifecycle. A Quality Gate acts as a policy-driven checkpoint that evaluates whether a project meets predefined thresholds across a set of critical code health metrics.
 
